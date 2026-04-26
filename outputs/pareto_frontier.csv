@@ -1,0 +1,8 @@
+params_b,avg_score,model_name
+-1.0,28.614516488633864,cognitivecomputations/dolphin-2.9.2-Phi-3-Medium
+0.0,47.09154471380421,JungZoona/T3Q-Qwen2.5-14B-Instruct-1M-e3
+32.76,47.33695645964031,Saxo/Linkbricks-Horizon-AI-Avengers-V1-32B
+32.764,47.36835680458376,ehristoforu/qwen2.5-test-32b-it
+72.7,47.85672202584548,MaziyarPanahi/calme-2.1-qwen2.5-72b
+72.706,48.10647092442315,huihui-ai/Qwen2.5-72B-Instruct-abliterated
+77.965,52.08138397879168,MaziyarPanahi/calme-3.2-instruct-78b
