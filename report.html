@@ -1,0 +1,395 @@
+import React, { useState } from 'react';
+import { 
+  Database, 
+  Layout, 
+  Cpu, 
+  Activity, 
+  ArrowRight, 
+  Github, 
+  BarChart3, 
+  Info, 
+  FileText, 
+  Settings,
+  Code2,
+  LineChart,
+  Search
+} from 'lucide-react';
+
+export default function App() {
+  const [activeTab, setActiveTab] = useState('home');
+
+  const scrollTo = (id) => {
+    setActiveTab(id);
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  // ----------------------------------------------------------------------
+  // CONTENT CONFIGURATION
+  // Update the 'file' attributes below to match your actual output files.
+  // ----------------------------------------------------------------------
+  const analysisOutputs = [
+    { 
+      id: 1, 
+      file: 'model_size_vs_score.png', 
+      title: 'Parameter Scale vs. Performance', 
+      desc: 'Scatter plot visualizing the correlation between a model\'s parameter count (size) and its average evaluation score.' 
+    },
+    { 
+      id: 2, 
+      file: 'architecture_comparison.png', 
+      title: 'Architecture Comparison', 
+      desc: 'Box-and-whisker plot displaying the performance distribution across various base model architectures (e.g., Llama, Mistral).' 
+    },
+    { 
+      id: 3, 
+      file: 'task_correlation.png', 
+      title: 'Benchmark Correlation Matrix', 
+      desc: 'Heatmap showcasing how performance on one benchmark correlates with others across the dataset.' 
+    },
+    { 
+      id: 4, 
+      file: 'top_models.png', 
+      title: 'Top Performing Models', 
+      desc: 'Bar chart highlighting the absolute top open-source models currently dominating the Hugging Face leaderboard.' 
+    },
+    { 
+      id: 5, 
+      file: 'precision_impact.png', 
+      title: 'Impact of Precision/Quantization', 
+      desc: 'Analysis of average performance shifts associated with lower precision formats like 4-bit and 8-bit.' 
+    },
+    { 
+      id: 6, 
+      file: 'type_distribution.png', 
+      title: 'Pretrained vs. Fine-tuned', 
+      desc: 'Distribution and average performance comparison between base pretrained models and instruction-tuned variants.' 
+    }
+  ];
+
+  const benchmarks = [
+    { name: 'MMLU', desc: 'Massive Multitask Language Understanding across 57 subjects including STEM, humanities, and others.' },
+    { name: 'ARC', desc: 'AI2 Reasoning Challenge containing complex grade-school science questions.' },
+    { name: 'HellaSwag', desc: 'Commonsense NLI benchmark evaluating physical situations and natural language inference.' },
+    { name: 'TruthfulQA', desc: 'Tests the propensity of models to reproduce falsehoods found online.' },
+    { name: 'Winogrande', desc: 'Large-scale adversarial benchmark for commonsense reasoning.' },
+    { name: 'GSM8K', desc: 'Dataset of high-quality, linguistically diverse grade school math word problems.' }
+  ];
+
+  return (
+    <div className="min-h-screen bg-slate-50 text-slate-800 font-sans">
+      
+      {/* Navigation */}
+      <nav className="fixed top-0 w-full bg-white/80 backdrop-blur-md border-b border-slate-200 z-50 shadow-sm">
+        <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-2 font-bold text-lg text-slate-900 cursor-pointer" onClick={() => scrollTo('home')}>
+            <BarChart3 className="text-blue-600 w-6 h-6" />
+            <span>LLM Leaderboard Analytics</span>
+          </div>
+          <div className="hidden md:flex gap-6 text-sm font-medium text-slate-600">
+            {['Dataset', 'Architecture', 'System', 'Analysis'].map((item) => (
+              <button 
+                key={item}
+                onClick={() => scrollTo(item.toLowerCase())}
+                className="hover:text-blue-600 transition-colors"
+              >
+                {item}
+              </button>
+            ))}
+          </div>
+          <a 
+            href="https://github.com/nipun-taneja/open-llm-leaderboard-analysis" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 text-slate-600 hover:text-slate-900 transition-colors"
+          >
+            <Github className="w-5 h-5" />
+            <span className="hidden sm:inline text-sm font-medium">GitHub</span>
+          </a>
+        </div>
+      </nav>
+
+      <main className="pt-24 pb-20 px-4 max-w-6xl mx-auto space-y-32">
+        
+        {/* HERO SECTION */}
+        <section id="home" className="relative overflow-hidden rounded-[2rem] bg-slate-900 text-white px-8 py-24 shadow-2xl">
+          {/* Subtle background grid effect */}
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+          
+          <div className="relative z-10 max-w-3xl mx-auto text-center space-y-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-500/20 text-blue-300 font-medium text-sm mb-4 border border-blue-500/30">
+              <Search className="w-4 h-4" /> Official Submission Report
+            </div>
+            <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-emerald-400 leading-tight pb-2">
+              Open LLM Leaderboard Analysis
+            </h1>
+            <p className="text-lg md:text-xl text-slate-300 font-light leading-relaxed">
+              A comprehensive data visualization and analysis pipeline for the Hugging Face Open LLM Leaderboard, enabling data-driven decisions in model architecture and selection.
+            </p>
+            <div className="flex flex-col sm:flex-row justify-center gap-4 pt-8">
+              <button 
+                onClick={() => scrollTo('analysis')} 
+                className="flex justify-center items-center gap-2 bg-blue-600 text-white px-8 py-3.5 rounded-full font-semibold hover:bg-blue-500 transition shadow-lg shadow-blue-500/30"
+              >
+                <LineChart className="w-5 h-5" /> View Analysis Outputs
+              </button>
+              <button 
+                onClick={() => scrollTo('dataset')} 
+                className="flex justify-center items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 text-white px-8 py-3.5 rounded-full font-semibold hover:bg-white/20 transition"
+              >
+                <FileText className="w-5 h-5" /> Read Documentation
+              </button>
+            </div>
+          </div>
+        </section>
+
+        {/* DATASET DESCRIPTION */}
+        <section id="dataset" className="scroll-mt-28">
+          <div className="flex items-center gap-3 mb-8">
+            <div className="p-3 bg-indigo-100 text-indigo-600 rounded-xl">
+              <Database className="w-6 h-6" />
+            </div>
+            <h2 className="text-3xl font-bold text-slate-900">Data Set Description</h2>
+          </div>
+          
+          <div className="grid md:grid-cols-2 gap-8">
+            <div className="space-y-6 text-slate-600 text-lg leading-relaxed">
+              <p>
+                The primary dataset is ingested from the <strong>Hugging Face Open LLM Leaderboard</strong>. It is a consolidated tracker that ranks open-source large language models and chatbots based on rigorous, standardized evaluation metrics.
+              </p>
+              <p>
+                After our pipeline executes, the processed data is stored in <code className="bg-slate-100 text-indigo-600 px-2 py-1 rounded text-sm font-mono border border-slate-200">hf_open_llm_leaderboard_clean.csv</code>. This normalized dataset includes critical metadata such as model architecture, parameter count (size), precision types, and aggregated scores across multiple distinct domains of reasoning.
+              </p>
+              <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                <h3 className="font-semibold text-slate-900 mb-4 flex items-center gap-2">
+                  <Database className="w-5 h-5 text-slate-400"/> Core Dataset Attributes
+                </h3>
+                <ul className="space-y-3 text-sm">
+                  <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-blue-500"></div> Model Name & Base Architecture</li>
+                  <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-blue-500"></div> Parameter Count (Model Size in Billions)</li>
+                  <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-blue-500"></div> Precision (FP16, 8-bit, 4-bit)</li>
+                  <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-blue-500"></div> Model Type (Pretrained vs Instruction Tuned)</li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="bg-slate-900 rounded-2xl p-6 text-white shadow-xl flex flex-col justify-center">
+              <h3 className="text-xl font-bold mb-6 text-slate-100 border-b border-slate-700 pb-4">Evaluation Benchmarks</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {benchmarks.map((b) => (
+                  <div key={b.name} className="bg-slate-800/50 p-4 rounded-xl border border-slate-700/50">
+                    <div className="font-bold text-blue-400 mb-1">{b.name}</div>
+                    <div className="text-xs text-slate-400 leading-snug">{b.desc}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* SYSTEM ARCHITECTURE */}
+        <section id="architecture" className="scroll-mt-28">
+          <div className="flex items-center gap-3 mb-8">
+            <div className="p-3 bg-emerald-100 text-emerald-600 rounded-xl">
+              <Layout className="w-6 h-6" />
+            </div>
+            <h2 className="text-3xl font-bold text-slate-900">System Architecture</h2>
+          </div>
+
+          <div className="bg-white p-8 md:p-12 rounded-3xl border border-slate-200 shadow-sm mb-8 overflow-x-auto">
+            <div className="min-w-[800px] flex items-center justify-between gap-4">
+              
+              <div className="flex flex-col items-center text-center p-6 bg-slate-50 border border-slate-200 rounded-2xl w-52 relative group">
+                <div className="absolute inset-0 bg-blue-500/5 rounded-2xl opacity-0 group-hover:opacity-100 transition"></div>
+                <Database className="w-10 h-10 text-blue-600 mb-4" />
+                <h3 className="font-bold text-slate-900 mb-2">HF Hub</h3>
+                <p className="text-xs text-slate-500">Raw Leaderboard API & Dataset repository</p>
+              </div>
+
+              <ArrowRight className="text-slate-300 w-8 h-8 flex-shrink-0" />
+
+              <div className="flex flex-col items-center text-center p-6 bg-slate-50 border border-slate-200 rounded-2xl w-52 relative group">
+                 <div className="absolute inset-0 bg-indigo-500/5 rounded-2xl opacity-0 group-hover:opacity-100 transition"></div>
+                <Cpu className="w-10 h-10 text-indigo-600 mb-4" />
+                <h3 className="font-bold text-slate-900 mb-2">Data Processor</h3>
+                <p className="text-xs text-slate-500">download_preprocess_data.py</p>
+              </div>
+
+              <ArrowRight className="text-slate-300 w-8 h-8 flex-shrink-0" />
+
+              <div className="flex flex-col items-center text-center p-6 bg-slate-50 border border-slate-200 rounded-2xl w-52 relative group">
+                 <div className="absolute inset-0 bg-emerald-500/5 rounded-2xl opacity-0 group-hover:opacity-100 transition"></div>
+                <FileText className="w-10 h-10 text-emerald-600 mb-4" />
+                <h3 className="font-bold text-slate-900 mb-2">Clean Artifact</h3>
+                <p className="text-xs text-slate-500">hf_open_llm_leaderboard_clean.csv</p>
+              </div>
+
+              <ArrowRight className="text-slate-300 w-8 h-8 flex-shrink-0" />
+
+              <div className="flex flex-col items-center text-center p-6 bg-slate-50 border border-slate-200 rounded-2xl w-52 relative group">
+                 <div className="absolute inset-0 bg-purple-500/5 rounded-2xl opacity-0 group-hover:opacity-100 transition"></div>
+                <Activity className="w-10 h-10 text-purple-600 mb-4" />
+                <h3 className="font-bold text-slate-900 mb-2">Outputs Engine</h3>
+                <p className="text-xs text-slate-500">EDA & Matplotlib visual generation</p>
+              </div>
+
+            </div>
+          </div>
+          
+          <p className="text-slate-600 text-lg max-w-4xl leading-relaxed">
+            The architecture is designed as a linear, reproducible ETL (Extract, Transform, Load) pipeline. It isolates the ingestion logic from the analytical presentation logic, ensuring that whenever the Hugging Face leaderboard is updated, the preprocessing script can be rerun to generate a fresh CSV, subsequently updating all analytical outputs without code modification.
+          </p>
+        </section>
+
+        {/* SYSTEM DESCRIPTION */}
+        <section id="system" className="scroll-mt-28">
+          <div className="flex items-center gap-3 mb-8">
+            <div className="p-3 bg-amber-100 text-amber-600 rounded-xl">
+              <Settings className="w-6 h-6" />
+            </div>
+            <h2 className="text-3xl font-bold text-slate-900">System Description</h2>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="md:col-span-2 space-y-6">
+              <p className="text-slate-600 text-lg leading-relaxed">
+                Our analysis system is a Python-based data science environment formulated to distill complex, high-dimensional performance data into understandable visual insights.
+              </p>
+              
+              <div className="space-y-4">
+                <div className="flex gap-4 p-5 bg-white border border-slate-200 rounded-2xl shadow-sm">
+                  <div className="mt-1">
+                    <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold">1</div>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-slate-900 text-lg">Extraction & Cleaning</h4>
+                    <p className="text-slate-600 mt-1">The system queries remote datasets, handling missing evaluations, coercing mixed data types (e.g., converting "7B" string parameters to floats), and standardizing model naming conventions.</p>
+                  </div>
+                </div>
+
+                <div className="flex gap-4 p-5 bg-white border border-slate-200 rounded-2xl shadow-sm">
+                  <div className="mt-1">
+                    <div className="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold">2</div>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-slate-900 text-lg">Statistical Analysis</h4>
+                    <p className="text-slate-600 mt-1">Utilizes <code>pandas</code> and <code>numpy</code> to calculate aggregations, correlations, and distribution metrics, quantifying the trade-offs between model scale and performance.</p>
+                  </div>
+                </div>
+
+                <div className="flex gap-4 p-5 bg-white border border-slate-200 rounded-2xl shadow-sm">
+                  <div className="mt-1">
+                    <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold">3</div>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-slate-900 text-lg">Visualization Generation</h4>
+                    <p className="text-slate-600 mt-1">Leverages <code>matplotlib</code> and <code>seaborn</code> to dynamically render plots. All charts are systematically saved to the <code>/outputs</code> directory for integration into reports.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6">
+              <h3 className="font-bold text-slate-900 mb-6 flex items-center gap-2 border-b border-slate-200 pb-4">
+                <Code2 className="w-5 h-5 text-slate-500"/> Tech Stack
+              </h3>
+              <ul className="space-y-4">
+                <li>
+                  <div className="font-semibold text-slate-800">Python 3.x</div>
+                  <div className="text-sm text-slate-500">Core execution language</div>
+                </li>
+                <li>
+                  <div className="font-semibold text-slate-800">Pandas & NumPy</div>
+                  <div className="text-sm text-slate-500">Data manipulation & analysis</div>
+                </li>
+                <li>
+                  <div className="font-semibold text-slate-800">Matplotlib & Seaborn</div>
+                  <div className="text-sm text-slate-500">Statistical data visualization</div>
+                </li>
+                <li>
+                  <div className="font-semibold text-slate-800">Hugging Face API</div>
+                  <div className="text-sm text-slate-500">Data ingestion endpoints</div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        {/* ANALYSIS OUTPUTS */}
+        <section id="analysis" className="scroll-mt-28">
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center gap-3">
+              <div className="p-3 bg-blue-100 text-blue-600 rounded-xl">
+                <LineChart className="w-6 h-6" />
+              </div>
+              <h2 className="text-3xl font-bold text-slate-900">Analysis & Outputs</h2>
+            </div>
+          </div>
+
+          <div className="bg-blue-50 border border-blue-200 rounded-xl p-5 mb-8 flex items-start gap-4">
+            <Info className="w-6 h-6 text-blue-600 flex-shrink-0 mt-0.5" />
+            <div className="text-blue-900">
+              <p className="font-semibold text-lg mb-1">Local Deployment Info</p>
+              <p className="text-blue-800/80">
+                This section dynamically loads the generated charts from the <code className="bg-blue-100 px-1.5 py-0.5 rounded text-sm text-blue-900 font-mono">./outputs/</code> folder of your repository. 
+                If an image is not found, a placeholder will appear showing the expected filename. You can edit the <code>analysisOutputs</code> array in this React code to match your actual file names.
+              </p>
+            </div>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {analysisOutputs.map((item) => (
+              <div key={item.id} className="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl transition-shadow duration-300 overflow-hidden flex flex-col group">
+                <div className="h-64 bg-slate-100 relative overflow-hidden border-b border-slate-200">
+                  <img 
+                    src={`./outputs/${item.file}`} 
+                    alt={item.title}
+                    className="w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-500"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      // Fallback SVG generation if the file isn't found locally
+                      const svg = encodeURIComponent(`
+                        <svg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'>
+                          <rect width='800' height='600' fill='#f8fafc'/>
+                          <rect width='760' height='560' x='20' y='20' fill='none' stroke='#cbd5e1' stroke-width='3' stroke-dasharray='12,12' rx='16'/>
+                          <path d="M400 200 L400 280 M360 240 L440 240" stroke="#94a3b8" stroke-width="4" stroke-linecap="round"/>
+                          <circle cx="400" cy="240" r="60" fill="none" stroke="#94a3b8" stroke-width="4"/>
+                          <text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='24' font-weight='bold' fill='#475569'>Image File Not Found</text>
+                          <text x='50%' y='56%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='18' fill='#64748b'>Expected: ./outputs/${item.file}</text>
+                          <text x='50%' y='61%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='14' fill='#94a3b8'>(Update the 'file' property in code to match your real output)</text>
+                        </svg>
+                      `);
+                      e.target.src = `data:image/svg+xml;charset=UTF-8,${svg}`;
+                    }}
+                  />
+                </div>
+                <div className="p-6 flex-1 flex flex-col">
+                  <h3 className="text-xl font-bold text-slate-900 mb-3">{item.title}</h3>
+                  <p className="text-slate-600 text-sm leading-relaxed flex-1">
+                    {item.desc}
+                  </p>
+                  <div className="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400 font-mono">
+                    <span>Source: {item.file}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+      </main>
+
+      {/* Footer */}
+      <footer className="bg-slate-900 text-slate-400 py-12 border-t border-slate-800 mt-12">
+        <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="flex items-center gap-2 text-white font-bold text-lg">
+            <BarChart3 className="w-5 h-5 text-blue-500" />
+            <span>Open LLM Leaderboard Analysis</span>
+          </div>
+          <p className="text-sm">
+            Submission Report for <a href="https://github.com/nipun-taneja/open-llm-leaderboard-analysis" className="text-blue-400 hover:underline">nipun-taneja/open-llm-leaderboard-analysis</a>
+          </p>
+        </div>
+      </footer>
+    </div>
+  );
+}
