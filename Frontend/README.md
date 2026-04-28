@@ -1,23 +1,30 @@
-<<<<<<< HEAD
-# React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
 =======
 # open-llm-leaderboard-analysis
 A Data visualisation project to analyse open llm leaderboard data from hugging face to make effective decisions while choosing llm models.
-Please visit here for final report:
-https://gemini.google.com/share/36c53e8a37a9
->>>>>>> 2bab519a55be554601c17761b7cb76669a909745
+
+Project Description
+
+This project presents an interactive frontend dashboard for analyzing the Hugging Face Open LLM Leaderboard. The goal is to transform raw evaluation results into meaningful visual insights that help users understand model performance, efficiency, and trade-offs.
+
+The system integrates a data processing pipeline with a visualization layer to enable intuitive exploration of large language models across multiple benchmarks. Instead of viewing leaderboard scores in tabular form, this dashboard provides visual representations that highlight trends, comparisons, and optimal model choices.
+
+Key visualizations include:
+
+A scatter plot showing the relationship between model size (parameter count) and overall performance, helping identify whether larger models consistently perform better.
+A benchmark comparison chart that evaluates models across multiple tasks, revealing strengths and weaknesses in areas such as reasoning, mathematics, and coding.
+A Pareto frontier analysis that highlights models offering the best performance for their size, enabling efficient decision-making for deployment.
+A model detail view that provides a deeper breakdown of individual model capabilities across benchmarks.
+
+The frontend is built using React and Vite, with charts generated through a Python-based analysis pipeline and rendered as visual outputs. This combination allows for both high-performance data processing and user-friendly visualization.
+
+Overall, the project demonstrates how data visualization can enhance the interpretability of machine learning benchmarks and support better model selection for real-world applications.
+
+🎯 Purpose
+
+The primary objectives of this project are:
+
+To simplify the analysis of LLM leaderboard data
+To compare models beyond raw scores
+To identify efficient models using performance vs size trade-offs
+To provide a user-friendly interface for exploring complex evaluation data
