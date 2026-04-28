@@ -2,31 +2,66 @@ import React from 'react';
 
 export default function App() {
   const analysisOutputs = [
-    {
-      id: 1,
-      file: 'dashboard_scatter.png',
-      title: 'Parameter Scale vs. Performance',
-      desc: "Scatter plot visualizing the correlation between a model's parameter count and its overall evaluation score.",
-    },
-    {
-      id: 2,
-      file: 'comparison_bar.png',
-      title: 'Benchmark Comparison',
-      desc: 'Side-by-side comparison of selected models across benchmark evaluations.',
-    },
-    {
-      id: 3,
-      file: 'pareto_frontier.png',
-      title: 'Pareto Frontier',
-      desc: 'Trade-off between parameter count and performance, highlighting Pareto-optimal models.',
-    },
-    {
-      id: 4,
-      file: 'model_detail.png',
-      title: 'Model Detail View',
-      desc: 'Detailed breakdown of one selected model including metadata and benchmark scores.',
-    },
-  ];
+  {
+    id: 1,
+    file: 'dashboard_scatter.png',
+    title: 'Parameter Scale vs. Performance',
+    desc: `
+        This scatter plot analyzes the relationship between model size (parameter count) and overall performance.
+
+        Most models are densely clustered below 20B parameters, indicating that the majority of open-source models operate in the small-to-medium scale range. Within this region, performance varies significantly, suggesting that architectural choices and fine-tuning strategies play a critical role beyond just model size.
+
+        Larger models (50B+ parameters) generally achieve higher scores, but the improvement is not strictly linear. Some smaller models outperform larger ones, highlighting efficiency differences across model families.
+
+        Overall, the chart demonstrates that while scale contributes to performance, it is not the sole determining factor.
+            `,
+  },
+
+  {
+    id: 2,
+    file: 'comparison_bar.png',
+    title: 'Model Comparison Across Benchmarks',
+    desc: `
+          This bar chart compares the performance of selected models across multiple benchmark datasets.
+
+          All models show strong performance on GPQA and GSM8K, indicating solid capabilities in reasoning and mathematical problem-solving tasks. However, performance drops noticeably on HumanEval, suggesting limitations in code generation or programming-related tasks.
+
+          The differences between models are relatively small, indicating that performance is consistent across architectures for most benchmarks. This suggests that improvements at this level are incremental rather than drastic.
+
+          Overall, the chart highlights benchmark-specific strengths and weaknesses rather than a single dominant model.
+              `,
+  },
+
+  {
+    id: 3,
+    file: 'pareto_frontier.png',
+    title: 'Pareto Frontier Analysis',
+    desc: `
+        This chart visualizes the trade-off between model size and performance using a Pareto frontier.
+
+        Models on the Pareto frontier represent optimal choices, achieving the best possible performance for their size. These models are particularly valuable for deployment scenarios where efficiency is critical.
+
+        The presence of dominated models (those below the frontier) indicates inefficiencies—larger models that do not provide proportional performance gains compared to smaller alternatives.
+
+        This analysis helps identify models that balance cost and performance effectively, making it useful for real-world system design decisions.
+            `,
+  },
+
+  {
+    id: 4,
+    file: 'model_detail.png',
+    title: 'Model Detail Analysis',
+    desc: `
+          This view provides a detailed breakdown of an individual model's performance across benchmarks.
+
+          It highlights how a single model performs differently depending on the task, revealing strengths in certain domains and weaknesses in others. For example, a model may excel in reasoning benchmarks while underperforming in coding or factual accuracy.
+
+          Such detailed analysis is important for selecting models based on specific use cases rather than relying on overall averages.
+
+          This chart supports deeper interpretability and helps guide informed model selection decisions.
+              `,
+  },
+];
 
   const benchmarks = [
     {
@@ -226,29 +261,31 @@ export default function App() {
         <section id="analysis" style={styles.section}>
           <h2 style={styles.sectionTitle}>Analysis and Outputs</h2>
 
-          <div style={styles.infoBox}>
+          {/* <div style={styles.infoBox}>
             This page loads images from <code style={styles.code}>/outputs/</code> inside the
             public folder.
-          </div>
+          </div> */}
 
           <div style={styles.chartGrid}>
             {analysisOutputs.map((item) => (
               <div key={item.id} style={styles.chartCard}>
-                <div style={styles.chartImageWrap}>
-                  <img
-                    src={`/outputs/${item.file}`}
-                    alt={item.title}
-                    style={styles.chartImage}
-                    onError={(e) => {
-                      e.currentTarget.style.display = 'none';
-                    }}
-                  />
-                </div>
+                <div style={styles.chartRow}>
+                  <div style={styles.chartImageWrap}>
+                    <img
+                      src={`/outputs/${item.file}`}
+                      alt={item.title}
+                      style={styles.chartImage}
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                      }}
+                    />
+                  </div>
 
-                <div style={styles.chartBody}>
-                  <h3 style={styles.chartTitle}>{item.title}</h3>
-                  <p style={styles.chartDesc}>{item.desc}</p>
-                  <div style={styles.chartSource}>Source: {item.file}</div>
+                  <div style={styles.chartBody}>
+                    <h3 style={styles.chartTitle}>{item.title}</h3>
+                    <p style={styles.chartDesc}>{item.desc}</p>
+                    {/* <div style={styles.chartSource}>Source: {item.file}</div> */}
+                  </div>
                 </div>
               </div>
             ))}
@@ -516,7 +553,8 @@ const styles = {
   },
   chartGrid: {
     display: 'grid',
-    gridTemplateColumns: '1fr 1fr',
+    // gridTemplateColumns: '1fr 1fr',
+    gridTemplateColumns: '1fr',
     gap: '24px',
   },
   chartCard: {
@@ -527,25 +565,37 @@ const styles = {
     boxShadow: '0 2px 8px rgba(15,23,42,0.06)',
   },
   chartImageWrap: {
-    background: '#f1f5f9',
-    padding: '14px',
-    borderBottom: '1px solid #e2e8f0',
-  },
+  background: '#f1f5f9',
+  padding: '24px',
+  borderRight: '1px solid #e2e8f0',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  minHeight: '520px',   // 🔥 bigger container
+},
   chartImage: {
-    width: '100%',
-    maxHeight: '360px',
-    objectFit: 'contain',
-    display: 'block',
-  },
+  width: '100%',        // 🔥 full width
+  height: '100%',
+  maxHeight: '600px',   // control height nicely
+  objectFit: 'contain',
+},
   chartBody: {
-    padding: '24px',
-  },
+  padding: '32px',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+},
+chartRow: {
+  display: 'grid',
+  gridTemplateColumns: '2fr 1fr', // 🔥 image gets more space
+  alignItems: 'stretch',
+},
   chartTitle: {
   margin: '0 0 12px 0',
   fontSize: '34px',
   fontWeight: 700,
 },
-  cchartDesc: {
+  chartDesc: {
   color: '#475569',
   fontSize: '22px',
   lineHeight: 1.8,
