@@ -1,4 +1,5 @@
 import React from 'react';
+import ZoomDialog from './components/ZoomDialog';
 
 export default function App() {
   const analysisOutputs = [
@@ -271,14 +272,16 @@ export default function App() {
               <div key={item.id} style={styles.chartCard}>
                 <div style={styles.chartRow}>
                   <div style={styles.chartImageWrap}>
-                    <img
-                      src={`/outputs/${item.file}`}
-                      alt={item.title}
-                      style={styles.chartImage}
-                      onError={(e) => {
-                        e.currentTarget.style.display = 'none';
-                      }}
-                    />
+                    <ZoomDialog imageSrc={`/outputs/${item.file}`} imageAlt={item.title}>
+                      <img
+                        src={`/outputs/${item.file}`}
+                        alt={item.title}
+                        style={styles.chartImage}
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none';
+                        }}
+                      />
+                    </ZoomDialog>
                   </div>
 
                   <div style={styles.chartBody}>
